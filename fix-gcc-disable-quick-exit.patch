@@ -1,0 +1,259 @@
+diff -ur a/libstdc++-v3/configure b/libstdc++-v3/configure
+--- a/libstdc++-v3/configure	2025-07-11 09:33:12.310365797 +0300
++++ b/libstdc++-v3/configure	2026-03-13 08:15:36.811325373 +0300
+@@ -27855,11 +27855,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_at_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_at_quick_exit_use=yes
++# else
+   glibcxx_cv_func_at_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -27913,11 +27913,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_quick_exit_use=yes
++# else
+   glibcxx_cv_func_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -35072,11 +35072,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_at_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_at_quick_exit_use=yes
++# else
+   glibcxx_cv_func_at_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -35130,11 +35130,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_quick_exit_use=yes
++# else
+   glibcxx_cv_func_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -41007,11 +41007,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_at_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_at_quick_exit_use=yes
++# else
+   glibcxx_cv_func_at_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -41065,11 +41065,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_quick_exit_use=yes
++# else
+   glibcxx_cv_func_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -46994,11 +46994,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_at_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_at_quick_exit_use=yes
++# else
+   glibcxx_cv_func_at_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -47052,11 +47052,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_quick_exit_use=yes
++# else
+   glibcxx_cv_func_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -53708,11 +53708,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_at_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_at_quick_exit_use=yes
++# else
+   glibcxx_cv_func_at_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -53766,11 +53766,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_quick_exit_use=yes
++# else
+   glibcxx_cv_func_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -60099,11 +60099,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_at_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_at_quick_exit_use=yes
++# else
+   glibcxx_cv_func_at_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -60157,11 +60157,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_quick_exit_use=yes
++# else
+   glibcxx_cv_func_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -66695,11 +66695,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_at_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_at_quick_exit_use=yes
++# else
+   glibcxx_cv_func_at_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -66753,11 +66753,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_quick_exit_use=yes
++# else
+   glibcxx_cv_func_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -72499,11 +72499,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_at_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_at_quick_exit_use=yes
++# else
+   glibcxx_cv_func_at_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -72557,11 +72557,11 @@
+   return 0;
+ }
+ _ACEOF
+-if ac_fn_cxx_try_compile "$LINENO"; then :
+-  glibcxx_cv_func_quick_exit_use=yes
+-else
++# if ac_fn_cxx_try_compile "$LINENO"; then :
++#   glibcxx_cv_func_quick_exit_use=yes
++# else
+   glibcxx_cv_func_quick_exit_use=no
+-fi
++# fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+       ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'

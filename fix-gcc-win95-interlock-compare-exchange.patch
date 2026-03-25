@@ -1,0 +1,46 @@
+diff -ur a/libgcc/config/i386/gthr-win32.c b/libgcc/config/i386/gthr-win32.c
+--- a/libgcc/config/i386/gthr-win32.c	2026-03-12 14:52:03.549619652 +0300
++++ b/libgcc/config/i386/gthr-win32.c	2026-03-12 14:52:10.070137676 +0300
+@@ -31,6 +31,8 @@
+ #ifndef __GTHREAD_HIDE_WIN32API
+ # define __GTHREAD_HIDE_WIN32API 1
+ #endif
++#undef  __GTHREAD_I486_INLINE_LOCK_PRIMITIVES
++#define __GTHREAD_I486_INLINE_LOCK_PRIMITIVES
+ #include "gthr-win32.h"
+ 
+ /* Windows32 threads specific definitions. The windows32 threading model
+diff -ur a/libgcc/config/i386/gthr-win32.h b/libgcc/config/i386/gthr-win32.h
+--- a/libgcc/config/i386/gthr-win32.h	2026-03-12 14:50:35.519580467 +0300
++++ b/libgcc/config/i386/gthr-win32.h	2026-03-12 14:55:09.612602792 +0300
+@@ -374,9 +374,28 @@
+ extern int __mingwthr_key_dtor (unsigned long, void (*) (void *));
+ #endif /* _WIN32 && !__CYGWIN__ */
+ 
+-/* __GTHR_W32_InterlockedCompareExchange is left over from win95,
+-   which did not support InterlockedCompareExchange. */
++/* The Windows95 kernel does not export InterlockedCompareExchange.
++ T his provides a substitute.   When building app*s that reference
++ gthread_mutex_try_lock, the  __GTHREAD_I486_INLINE_LOCK_PRIMITIVES
++ macro  must be defined if Windows95 is a target.  Currently
++ gthread_mutex_try_lock is not referenced by libgcc or libstdc++.  */
++#ifdef __GTHREAD_I486_INLINE_LOCK_PRIMITIVES
++static inline long
++__gthr_i486_lock_cmp_xchg(long *__dest, long __xchg, long __comperand)
++{
++  long result;
++  __asm__ __volatile__ ("\n\
++lock\n\
++cmpxchg{l} {%4, %1|%1, %4}\n"
++: "=a" (result), "=m" (*__dest)
++: "0" (__comperand), "m" (*__dest), "r" (__xchg)
++: "cc");
++  return result;
++}
++#define __GTHR_W32_InterlockedCompareExchange __gthr_i486_lock_cmp_xchg
++#else  /* __GTHREAD_I486_INLINE_LOCK_PRIMITIVES */
+ #define __GTHR_W32_InterlockedCompareExchange InterlockedCompareExchange
++#endif /* __GTHREAD_I486_INLINE_LOCK_PRIMITIVES */
+ 
+ static inline int
+ __gthread_active_p (void)

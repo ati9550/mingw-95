@@ -1,0 +1,19 @@
+# builds
+
+build*/
+
+# source archives
+
+src/
+*.log
+
+# source folders
+
+binutils-*/
+gcc-*/
+libunicows-*/
+mingw-w64/
+
+# releases
+
+mingw-95*
