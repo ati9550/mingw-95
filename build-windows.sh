@@ -1,5 +1,5 @@
 #!/bin/bash
-# build.sh - script compiling the toolchain
+# build-windows.sh - script compiling the toolchain to run on Windows
 # Copyright (C) 2026 ati9550
 #
 # This program is free software: you can redistribute it and/or modify
@@ -75,11 +75,11 @@ fi
 
 if [ -z "$PREFIX" ]; then
 	set +e
-	rm -r build
+	rm -r build-windows
 
 	set -e
-	mkdir build
-	export PREFIX="$PWD/build"
+	mkdir build-windows
+	export PREFIX="$PWD/build-windows"
 fi
 
 set -e
@@ -87,15 +87,42 @@ set -e
 export TARGET=i586-w64-mingw32
 export TARGET_FOR_MINGW=i686-w64-mingw32 # it will not accept i586
 
+# setting up cross compilation
+
+if [ -z "$CROSS_COMPILE" ]; then
+	export CROSS_COMPILE="$PWD/build/bin/$TARGET-" # using mingw-95 by default
+fi
+
+if [ ! -f "${CROSS_COMPILE}gcc" ]; then
+	echo "Error: cross compilation compiler is not found at ${CROSS_COMPILE}gcc" >&2
+	exit 1
+fi
+
+export CROSS_COMPILE_BIN="$(dirname "${CROSS_COMPILE}gcc")"
+
+export STRIP="${CROSS_COMPILE}strip" \
+ CC="${CROSS_COMPILE}gcc" \
+ CXX="${CROSS_COMPILE}g++" \
+ RANLIB="${CROSS_COMPILE}ranlib" \
+ DLLTOOL="${CROSS_COMPILE}dlltool" \
+ AR="${CROSS_COMPILE}ar" \
+ AS="${CROSS_COMPILE}as" \
+ OBJDUMP="${CROSS_COMPILE}objdump" \
+ LDFLAGS="-Wl,-no-undefined" \
+ CFLAGS="-D__MSVCRT_VERSION__=0x400 \
+ -D_WIN32_WINNT=0x0400 -DWINVER=0x0400" \
+ CXXFLAGS="-D__MSVCRT_VERSION__=0x400 \
+ -D_WIN32_WINNT=0x0400 -DWINVER=0x0400" # TODO: make those flags the default
+
 # clean
 
 set +e
 
-rm -rf build-binutils
-rm -rf build-gmp
-rm -rf build-mpfr
-rm -rf build-mpc
-rm -rf build-gcc
+rm -rf build-windows-binutils
+rm -rf build-windows-gmp
+rm -rf build-windows-mpfr
+rm -rf build-windows-mpc
+rm -rf build-windows-gcc
 export OLDPWD="$PWD"
 
 cd mingw-w64/mingw-w64-headers &&
@@ -110,13 +137,14 @@ set -e
 
 # binutils
 
-mkdir build-binutils
-cd build-binutils
+mkdir build-windows-binutils
+cd build-windows-binutils
 
 ../binutils-*/configure \
  --target="$TARGET" \
  --prefix="$PREFIX" \
- --disable-multilib
+ --disable-multilib \
+ --host="$TARGET"
 
 make -j$(nproc)
 make install
@@ -124,12 +152,15 @@ cd ..
 
 # gmp
 
-mkdir build-gmp
-cd build-gmp
+mkdir build-windows-gmp
+cd build-windows-gmp
 
 ../gmp-*/configure \
+ --target="$TARGET" \
  --prefix="$PREFIX" \
- CFLAGS="-std=gnu17" # GCC 15 compiler check fail fix
+ --disable-static \
+ --enable-shared \
+ --host="$TARGET"
 
 make -j$(nproc)
 make install
@@ -137,13 +168,17 @@ cd ..
 
 # mpfr
 
-mkdir build-mpfr
-cd build-mpfr
+mkdir build-windows-mpfr
+cd build-windows-mpfr
 
 ../mpfr-*/configure \
+ --target="$TARGET" \
  --prefix="$PREFIX" \
+ --disable-static \
+ --enable-shared \
  --with-gmp-include="$PREFIX/include" \
- --with-gmp-lib="$PREFIX/lib"
+ --with-gmp-lib="$PREFIX/lib" \
+ --host="$TARGET"
 
 make -j$(nproc)
 make install
@@ -151,15 +186,19 @@ cd ..
 
 # mpc
 
-mkdir build-mpc
-cd build-mpc
+mkdir build-windows-mpc
+cd build-windows-mpc
 
 ../mpc-*/configure \
+ --target="$TARGET" \
  --prefix="$PREFIX" \
+ --disable-static \
+ --enable-shared \
  --with-gmp-include="$PREFIX/include" \
  --with-gmp-lib="$PREFIX/lib" \
  --with-mpfr-include="$PREFIX/include" \
- --with-mpfr-lib="$PREFIX/lib"
+ --with-mpfr-lib="$PREFIX/lib" \
+ --host="$TARGET"
 
 make -j$(nproc)
 make install
@@ -173,15 +212,17 @@ cd mingw-w64/mingw-w64-headers
  --host="$TARGET_FOR_MINGW" \
  --prefix="$PREFIX/$TARGET" \
  --with-default-msvcrt=msvcrt40 \
- --with-default-win32-winnt=0x0400
+ --with-default-win32-winnt=0x0400 \
+ CFLAGS="" \
+ CXXFLAGS=""
 
 make install
 cd ../..
 
 # gcc stage one
 
-mkdir build-gcc
-cd build-gcc
+mkdir build-windows-gcc
+cd build-windows-gcc
 
 ../gcc-*/configure \
  --target="$TARGET" \
@@ -194,10 +235,15 @@ cd build-gcc
  --with-mpfr-include="$PREFIX/include" \
  --with-mpfr-lib="$PREFIX/lib" \
  --with-mpc-include="$PREFIX/include" \
- --with-mpc-lib="$PREFIX/lib"
+ --with-mpc-lib="$PREFIX/lib" \
+ --enable-shared \
+ CFLAGS="$CFLAGS -DWIN32_LEAN_AND_MEAN" \
+ CXXFLAGS="$CXXFLAGS -DWIN32_LEAN_AND_MEAN" \
+ PATH="$CROSS_COMPILE_BIN:$PATH" \
+ --host="$TARGET" # this flag prevents the use of Windows abort function
 
-make all-gcc -j$(nproc)
-make install-gcc
+PATH="$CROSS_COMPILE_BIN:$PATH" make all-gcc -j$(nproc)
+PATH="$CROSS_COMPILE_BIN:$PATH" make install-gcc
 cd ..
 
 # mingw-w64-crt
@@ -209,13 +255,8 @@ cd mingw-w64/mingw-w64-crt
  --prefix="$PREFIX/$TARGET" \
  --with-default-msvcrt=msvcrt40 \
  --with-default-win32-winnt=0x0400 \
- STRIP="$PREFIX/bin/$TARGET-strip" \
- CC="$PREFIX/bin/$TARGET-gcc" \
- CXX="$PREFIX/bin/$TARGET-g++" \
- RANLIB="$PREFIX/bin/$TARGET-ranlib" \
- DLLTOOL="$PREFIX/bin/$TARGET-dlltool" \
- AR="$PREFIX/bin/$TARGET-ar" \
- AS="$PREFIX/bin/$TARGET-as" # this hell is caused by triplet mismatch
+ CFLAGS="" \
+ CXXFLAGS=""
 
 make -j$(nproc)
 make install
@@ -223,10 +264,22 @@ cd ../..
 
 # gcc stage two
 
-cd build-gcc
-make -j$(nproc)
-make install
+cd build-windows-gcc
+PATH="$CROSS_COMPILE_BIN:$PATH" make -j$(nproc)
+PATH="$CROSS_COMPILE_BIN:$PATH" make install
 cd ..
+
+# gcc fix missing DLLs
+
+cp build-windows-gcc/i586-w64-mingw32/libgcc/shlib/libgcc_s_sjlj-1.dll \
+ "$PREFIX/libexec/gcc/"*/* # is not installed at all for some reason
+
+cd "$PREFIX"
+cp lib/libgmp-*.dll bin # for gcc
+cp lib/libgmp-*.dll libexec/gcc/*/* # for cc1
+cp bin/libmpfr-*.dll libexec/gcc/*/* # for cc1
+cp bin/libmpc-*.dll libexec/gcc/*/* # for cc1
+cd "$OLDPWD"
 
 # install libunicows
 
@@ -264,7 +317,7 @@ strip "$PREFIX/bin/"*
 strip "$PREFIX/$TARGET/bin/"*
 strip "$PREFIX/libexec/gcc/"*/*/lto*
 strip "$PREFIX/libexec/gcc/"*/*/cc1*
-rm mingw-95
-ln -s build mingw-95
-rm mingw-95.tar.xz
-tar -c mingw-95 -f mingw-95.tar.xz -h -a
+rm mingw-95-windows
+ln -s build-windows mingw-95-windows
+rm mingw-95-windows.zip                  # zip is less efficient, but on Windows
+zip -r mingw-95-windows mingw-95-windows # you don't want to deal with tar

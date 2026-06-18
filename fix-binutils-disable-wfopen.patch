@@ -1,0 +1,12 @@
+diff -Naur a/bfd/bfdio.c b/bfd/bfdio.c
+--- a/bfd/bfdio.c	2024-01-29 03:00:00.000000000 +0300
++++ b/bfd/bfdio.c	2026-06-17 12:40:24.101820763 +0300
+@@ -116,7 +116,7 @@
+       return close_on_exec (fopen (filename, at[0], at[1], at[2]));
+     }
+ 
+-#elif defined (_WIN32)
++#elif defined (_WIN32) && 0
+   /* PR 25713: Handle extra long path names possibly containing '..' and '.'.  */
+    wchar_t **     lpFilePart = {NULL};
+    const wchar_t  prefix[] = L"\\\\?\\";

@@ -10,6 +10,9 @@ src/
 # source folders
 
 binutils-*/
+gmp-*/
+mpfr-*/
+mpc-*/
 gcc-*/
 libunicows-*/
 mingw-w64/
