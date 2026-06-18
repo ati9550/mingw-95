@@ -53,13 +53,17 @@ Remove the file `download_success.log` in case you want to download sources agai
 
 If you building it yourself, your toolchain should be placed at the `build` directory, use environment variables to incorporate it in your build system of choice as you usually would for cross compilation.
 
-Note that by default it has no flag overrides, so you might need to add this if the project you building checks for these defines:
+Note that it has no flag overrides, so you might need to add some if your project checks for `WINVER` and such:
 
 ```bash
 "$PREFIX/bin/i586-w64-mingw32-g++" main.cpp -o main.exe -static-libstdc++ -D_WIN32_WINNT=0x0400 -DWINVER=0x0400 -D_UNICODE -DUNICODE -lunicows
 ```
 
-And you should also provide [unicows.dll](https://web.archive.org/web/20160408155534/http://www.microsoft.com/en-us/download/confirmation.aspx?id=4237), if you need Unicode in Windows 95 and link against libunicows as shown earlier. Also make sure no to use `_wfopen` and such, MSVCRT does not support it on 95 and will silently fail. Use [Microsoft Visual C Runtime 6](https://web.archive.org/web/20120610063726if_/http://download.microsoft.com/download/vc60pro/update/1/w9xnt4/en-us/vc6redistsetup_enu.exe
+```cmd
+C:\path\to\the\toolchain\bin\g++.exe main.cpp -o main.exe -static-libstdc++ -D_WIN32_WINNT=0x0400 -DWINVER=0x0400 -D_UNICODE -DUNICODE -lunicows
+```
+
+You should also provide [unicows.dll](https://web.archive.org/web/20160408155534/http://www.microsoft.com/en-us/download/confirmation.aspx?id=4237), if you need Unicode in Windows 95 and link against libunicows as shown earlier. Also make sure not to use `_wfopen` and functions alike, MSVCRT does not support Unicode on 95 and these will silently fail. Use [Microsoft Visual C Runtime 6](https://web.archive.org/web/20120610063726if_/http://download.microsoft.com/download/vc60pro/update/1/w9xnt4/en-us/vc6redistsetup_enu.exe
 ) to provide `msvcrt.dll`.
 
 ## Special thanks
